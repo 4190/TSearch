@@ -1,0 +1,156 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  background: url('/images/background-dark.jpg');
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+.profile-card-4 .card-img-block {
+    float: left;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.profile-card-4 .card-body {
+    position: relative;
+}
+
+.profile-card-4 .profile {
+    border-radius: 50%;
+    position: absolute;
+    top: -62px;
+    left: 50%;
+    width: 100px;
+    border: 3px solid rgba(255, 255, 255, 1);
+    margin-left: -50px;
+}
+
+.profile-card-4 .card-img-block {
+    position: relative;
+}
+
+    .profile-card-4 .card-img-block > .info-box {
+        position: absolute;
+        background: rgba(217,11,225,0.6);
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        font-size: 14px;
+        -webkit-transition: 1s ease;
+        transition: 1s ease;
+        opacity: 0;
+    }
+
+    .profile-card-4 .card-img-block:hover > .info-box {
+        opacity: 1;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+
+.profile-card-4 h5 {
+    font-weight: 600;
+    color: #d90be1;
+}
+
+.profile-card-4 .card-text {
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.profile-card-4 .icon-block {
+    float: left;
+    width: 100%;
+}
+
+    .profile-card-4 .icon-block a {
+        text-decoration: none;
+    }
+
+.profile-card-4 i {
+    display: inline-block;
+    font-size: 16px;
+    color: #d90be1;
+    text-align: center;
+    border: 1px solid #d90be1;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+    .profile-card-4 i:hover {
+        background-color: #d90be1;
+        color: #fff;
+    }
+
+

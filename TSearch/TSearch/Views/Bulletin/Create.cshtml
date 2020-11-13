@@ -1,0 +1,42 @@
+﻿@model TSearch.ViewModels.CreateAdvertViewModel
+
+@using (Html.BeginForm("Create", "Bulletin"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ad.Text)
+        @Html.TextAreaFor(m => m.Ad.Text, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ad.Text, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ad.CharacterName)
+        @Html.TextBoxFor(m => m.Ad.CharacterName, new { @class = "form-control"})
+        @Html.ValidationMessageFor(m => m.Ad.CharacterName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ad.MinLevel)
+        @Html.TextBoxFor(m => m.Ad.MinLevel, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ad.MinLevel, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ad.MaxLevel)
+        @Html.TextBoxFor(m => m.Ad.MaxLevel, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ad.MaxLevel, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ad.Vocation)
+        @Html.DropDownListFor(m => m.Ad.Vocation, new SelectList(Model.VocList, "Name", "Name"), "Select Vocation", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ad.Vocation, "", new { @class = "text-danger"})
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ad.ServerName)
+        @Html.DropDownListFor(m => m.Ad.ServerName, new SelectList(Model.WorldsList, "name", "name"), "Select World", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ad.ServerName, "", new { @class = "text-danger"})
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary">Save</button>
+}
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

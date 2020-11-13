@@ -1,0 +1,54 @@
+﻿@model TSearch.ViewModels.BoardAdvertViewModel
+
+@using (Html.BeginForm("Board", "Bulletin"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.FilterFormAdvert.ServerName)
+        @Html.DropDownListFor(m => m.FilterFormAdvert.ServerName, new SelectList(Model.WorldsList, "name", "name"), "Select World", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.FilterFormAdvert.Vocation)
+        @Html.DropDownListFor(m => m.FilterFormAdvert.Vocation, new SelectList(Model.VocList, "Name", "Name"), "Select Vocation", new { @class = "form-control"})
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Save</button>
+}
+<div class="row">
+    @foreach (var advert in Model.AdsList)
+    {
+        <div class="col-md-4 mt-4">
+            <div class="card profile-card-4">
+                <div class="card-img-block">
+                    <div class="info-box">@advert.Text</div>
+                </div>
+                <div class="card-body pt-3">
+                    <img src="" alt="profile-image" class="profile" />
+                    <h5 class="card-title text-center">World: @advert.ServerName</h5>
+                    <h5 class="card-title text-center">Vocation: @advert.Vocation</h5>
+                    <h5 class="card-title text-center">Levels: @advert.MinLevel - @advert.MaxLevel</h5>
+                    <h5 class="card-title text-center">Country: </h5>
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!--
+    <div class="row">
+        <div class="col-md-4 mt-4">
+            <div class="card profile-card-4">
+                <div class="card-img-block">
+                    <div class="info-box">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+                </div>
+                <div class="card-body pt-3">
+                    <img src="" alt="profile-image" class="profile" />
+                    <h5 class="card-title text-center">World: </h5>
+                    <h5 class="card-title text-center">Vocation: </h5>
+                    <h5 class="card-title text-center">Levels: </h5>
+                    <h5 class="card-title text-center">Country: </h5>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    -->

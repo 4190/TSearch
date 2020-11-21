@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using TSearch.Data;
 using TSearch.Models;
 using TSearch.Models.ApiModels;
+using TSearch.Services;
 using TSearch.ViewModels;
 using RestSharp;
 using Newtonsoft.Json;
@@ -15,9 +16,11 @@ namespace TSearch.Controllers
     public class BulletinController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IManageAdvertsService _advertsService;
 
-        public BulletinController(ApplicationDbContext _context)
+        public BulletinController(ApplicationDbContext _context, IManageAdvertsService advertsService)
         {
+            _advertsService = advertsService;
             this._context = _context;
         }
 
@@ -28,7 +31,7 @@ namespace TSearch.Controllers
 
         public IActionResult Board(BoardAdvertViewModel model)
         {
-            List<Advert> adsList = _context.Adverts.ToList();
+            List<Advert> adsList = _advertsService.GetAllAdverts().Result;
 
             BoardAdvertViewModel viewModel = new BoardAdvertViewModel()
             {
@@ -43,10 +46,7 @@ namespace TSearch.Controllers
             }
             else
             {
-                adsList = adsList
-                    .Where(x => model.FilterFormAdvert.ServerName != null ? x.ServerName == model.FilterFormAdvert.ServerName : true)
-                    .Where(x => model.FilterFormAdvert.Vocation != null ? x.Vocation == model.FilterFormAdvert.Vocation : true)
-                    .ToList();
+                adsList = _advertsService.GetFiltered(adsList, model.FilterFormAdvert);
 
                 viewModel.AdsList = adsList;
                 return View(viewModel);
@@ -70,8 +70,7 @@ namespace TSearch.Controllers
         [HttpPost]
         public IActionResult Create(Advert ad)
         {
-            _context.Adverts.Add(ad);
-            _context.SaveChanges();
+            _advertsService.Create(ad);
             return RedirectToAction("Board");
         }
 

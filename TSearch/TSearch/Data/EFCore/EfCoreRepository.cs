@@ -10,7 +10,7 @@ namespace TSearch.Data.EFCore
         where TEntity :class, IEntity
         where TContext : DbContext
     {
-        private readonly TContext context;
+        protected readonly TContext context;
         public EfCoreRepository(TContext context)
         {
             this.context = context;

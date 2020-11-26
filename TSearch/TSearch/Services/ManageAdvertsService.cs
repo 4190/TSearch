@@ -49,7 +49,6 @@ namespace TSearch.Services
         {
             Advert ad = mapper.Map<Advert>(model);
             ad.ApplicationUser = user;
-            ad.Country = user.Country;
             ad.AuthorName = user.UserName;
 
             await advertRepository.Add(ad);

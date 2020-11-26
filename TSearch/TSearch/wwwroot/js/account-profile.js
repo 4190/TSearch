@@ -29,16 +29,3 @@ $('#change-password').click(function () {
         $('#set-country').removeClass('active');
     }  
 });
-
-$('#set-country').click(function () {
-    $('#target').fadeOut(50).load('/Account/GetPartial/_ProfileSetCountryPartial/' + $('#profile').attr('data-user-id')).fadeIn();
-    if (!($('#set-country').hasClass('active'))) {
-        $('#set-country').addClass('active');
-    }
-    if ($('#general').hasClass('active')) {
-        $('#general').removeClass('active');
-    }
-    if ($('#change-password').hasClass('active')) {
-        $('#change-password').removeClass('active');
-    }
-});

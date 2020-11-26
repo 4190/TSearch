@@ -59,7 +59,7 @@ namespace TSearch.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -97,7 +97,8 @@ namespace TSearch.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                ApplicationUser user = _userManager.FindByEmailAsync(model.Email).Result;
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -126,6 +127,30 @@ namespace TSearch.Controllers
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+        
+        //================================================ 
+        
+        [Authorize]
+        [Route("Account/GetPartial/{opt}/{id}")]
+        public IActionResult GetPartial(string opt, string id)
+        {
+            AccountProfileViewModel viewModel = new AccountProfileViewModel()
+            {
+                User = _userManager.FindByIdAsync(id).Result
+            }; 
+            return PartialView("../../Views/Account/" + opt, viewModel);
+        }
+
+        [Authorize]
+        public IActionResult Profile()
+        {
+            AccountProfileViewModel viewModel = new AccountProfileViewModel()
+            {
+                User = _userManager.GetUserAsync(HttpContext.User).Result
+            };
+
+            return View(viewModel);
         }
     }
 }

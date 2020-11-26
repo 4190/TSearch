@@ -1,0 +1,18 @@
+﻿@model TSearch.AccountViewModels.AccountProfileViewModel
+
+<div class="row" id="profile" data-user-id="@Model.User.Id">
+    <div class="list-group mt-5 col-md-3">
+        <a href="#" id="general" class="list-group-item list-group-item-action active">General</a>
+        <a href="#" id="change-password" class="list-group-item list-group-item-action">Change password</a>
+        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+    </div>
+    <div class="card mt-5 col-md-6" id="target">
+
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/js/account-profile.js"></script>
+}

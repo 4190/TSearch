@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TSearch.Models;
 using TSearch.DTO;
+using TSearch.ViewModels;
 
 namespace TSearch.Controllers
 {

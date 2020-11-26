@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using TSearch.Data;
+using TSearch.DTO;
 using TSearch.Models;
 using TSearch.Models.ApiModels;
 using TSearch.Services;
 using TSearch.ViewModels;
+
+
 using RestSharp;
 using Newtonsoft.Json;
 
@@ -16,10 +24,12 @@ namespace TSearch.Controllers
     public class BulletinController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IManageAdvertsService _advertsService;
 
-        public BulletinController(ApplicationDbContext _context, IManageAdvertsService advertsService)
+        public BulletinController(UserManager<ApplicationUser> userManager, ApplicationDbContext _context, IManageAdvertsService advertsService)
         {
+            _userManager = userManager;
             _advertsService = advertsService;
             this._context = _context;
         }
@@ -27,11 +37,12 @@ namespace TSearch.Controllers
         public IActionResult Index()
         {
             return View();
+           
         }
 
         public IActionResult Board(BoardAdvertViewModel model)
         {
-            List<Advert> adsList = _advertsService.GetAllAdverts().Result;
+            List<AdvertDTO> adsList = _advertsService.GetAllAdverts().Result;
 
             BoardAdvertViewModel viewModel = new BoardAdvertViewModel()
             {
@@ -53,11 +64,12 @@ namespace TSearch.Controllers
             }
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             var worldsListApiResponse = GetGameWorldsList();
             List<Vocation> vocations = GetVocationList();
-            
+
             CreateAdvertViewModel viewModel = new CreateAdvertViewModel
             {
                 WorldsList = worldsListApiResponse.worlds.allworlds,
@@ -68,10 +80,16 @@ namespace TSearch.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Advert ad)
+        public async Task<IActionResult> Create(CreateAdvertViewModel model)
         {
-            _advertsService.Create(ad);
+            ApplicationUser user = _userManager.GetUserAsync(HttpContext.User).Result;
+            await _advertsService.Create(model.Ad, user);
             return RedirectToAction("Board");
+        }
+
+        public IActionResult MyAdverts()
+        {
+            return Content("");
         }
 
         private ApiWorlds GetGameWorldsList()

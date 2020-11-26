@@ -35,8 +35,15 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Bulletin" asp-action="Board">Board</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Board</a>
+                        <div class="dropdown-menu" style="">
+                            <a class="dropdown-item" asp-area="" asp-controller="Bulletin" asp-action="Board">Show all</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Bulletin" asp-action="Create">Create your ad</a>
+                            <a class="dropdown-item" href="#">My ads</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
                     </li>
                 </ul>
 

@@ -62,7 +62,7 @@ namespace TSearch.Controllers
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
-                {
+                { 
                     _logger.LogInformation("User created a new account with password.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -130,6 +130,18 @@ namespace TSearch.Controllers
         }
         
         //================================================ 
+
+        public async Task<IActionResult> ChangePassword(AccountProfileViewModel model)
+        {
+            ApplicationUser user = _userManager.FindByIdAsync(model.User.Id).Result;
+            var result = await _userManager.ChangePasswordAsync(user, model.ChangePasswordModel.OldPassword, model.ChangePasswordModel.Password);
+            
+            if(result.Succeeded)
+            {
+                return RedirectToAction("Success");
+            }
+            return RedirectToAction("ProfileError");
+        }
         
         [Authorize]
         [Route("Account/GetPartial/{opt}/{id}")]
@@ -151,6 +163,16 @@ namespace TSearch.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public IActionResult ProfileError()
+        {
+            return View();
+        }
+
+        public IActionResult Success()
+        {
+            return View();
         }
     }
 }

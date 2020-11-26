@@ -9,6 +9,7 @@ namespace TSearch.AccountViewModels
     public class AccountProfileViewModel
     {
         public ApplicationUser User { get; set; }
+        public ChangePasswordViewModel ChangePasswordModel { get; set; }
 
     }
 }

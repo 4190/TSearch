@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using TSearch.DTO;
 using TSearch.Models;
-using TSearch.ViewModels;
+using TSearch.Models.ApiModels;
 
 namespace TSearch.Services
 {
@@ -13,6 +13,6 @@ namespace TSearch.Services
     {
         public Task<List<AdvertDTO>> GetAllAdverts();
         public List<AdvertDTO> GetFiltered(List<AdvertDTO> advertList, AdvertDTO filter);
-        public Task Create(AdvertDTO advert, ApplicationUser user);
+        public Task<Result> Create(AdvertDTO advert, ApplicationUser user);
     }
 }

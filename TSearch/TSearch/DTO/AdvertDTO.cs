@@ -16,11 +16,12 @@ namespace TSearch.DTO
         [Display(Name = "Character Name")]
         public string CharacterName { get; set; }
 
-        [Required(ErrorMessage = "Choose a game server")]
-        [Display(Name = "Game World")]
+        [Range(0, 9999, ErrorMessage = "Value must be numeric from {1} to {2}")]
+        [Required]
+        public int CharacterLevel { get; set; }
+
         public string ServerName { get; set; }
 
-        [Required]
         public string Vocation { get; set; }
 
         [Range(0, 9999, ErrorMessage = "Value must be numeric from {1} to {2}")]

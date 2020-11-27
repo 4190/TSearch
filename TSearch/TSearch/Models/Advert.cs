@@ -23,6 +23,10 @@ namespace TSearch.Models
         [Required]
         public string Vocation { get; set; }
 
+        [Range(0, 9999, ErrorMessage = "Value must be numeric from {1} to {2}")]
+        [Required]
+        public int CharacterLevel { get; set; }
+
         [Range(0,9999, ErrorMessage ="Value must be numeric from {1} to {2}")]
         [Required]
         [Display(Name = "Minimum teammate level")]

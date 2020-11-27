@@ -135,7 +135,6 @@ namespace TSearch.Controllers
         {
             ApplicationUser user = _userManager.FindByIdAsync(model.User.Id).Result;
             var result = await _userManager.ChangePasswordAsync(user, model.ChangePasswordModel.OldPassword, model.ChangePasswordModel.Password);
-            
             if(result.Succeeded)
             {
                 return RedirectToAction("Success");

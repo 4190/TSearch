@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
+using RestSharp;
 
 using Microsoft.EntityFrameworkCore;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,7 @@ using TSearch.DTO;
 using TSearch.Data;
 using TSearch.Data.EFCore;
 using TSearch.Models;
+using TSearch.Models.ApiModels;
 using TSearch.ViewModels;
 
 
@@ -45,13 +49,59 @@ namespace TSearch.Services
 
         }
 
-        public async Task Create(AdvertDTO model, ApplicationUser user)
+        public async Task<Result> Create(AdvertDTO model, ApplicationUser user)
         {
-            Advert ad = mapper.Map<Advert>(model);
-            ad.ApplicationUser = user;
-            ad.AuthorName = user.UserName;
+            
+            Character character = GetCharacterDetailsIfExists(model.CharacterName);
+            character = ChangeVocationNameToShortForm(character);
+            if(String.IsNullOrEmpty(character.characters.error))
+            {
+                Advert ad = mapper.Map<Advert>(model);
+                mapper.Map(character, ad);
 
-            await advertRepository.Add(ad);
+                ad.ApplicationUser = user;
+                ad.AuthorName = user.UserName;
+
+                await advertRepository.Add(ad);
+
+                return new Result { Succeeded = true };
+            }
+            else
+            {
+                return new Result { Succeeded = false };
+            }
+        }
+
+        public Character ChangeVocationNameToShortForm(Character character)
+        {
+            string str = character.characters.data.vocation;
+            string result = "";
+            bool v = true;
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] == ' ')
+                {
+                    v = true;
+                }
+                else if (str[i] != ' ' && v == true)
+                {
+                    result += (str[i]);
+                    v = false;
+                }
+            }
+            character.characters.data.vocation = result;
+
+            return character;
+        }
+
+        public Character GetCharacterDetailsIfExists(string charName)
+        {
+            var tibiaApiClient = new RestClient("https://api.tibiadata.com/v2/characters/");
+            var characterRequest = new RestRequest(charName + ".json", DataFormat.Json);
+            var characterResponse = tibiaApiClient.Get(characterRequest);
+            Character characterApiResponse = JsonConvert.DeserializeObject<Character>(characterResponse.Content);
+
+            return characterApiResponse;
         }
     }
 }

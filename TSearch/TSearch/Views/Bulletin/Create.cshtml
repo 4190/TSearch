@@ -1,5 +1,7 @@
 ﻿@model TSearch.ViewModels.CreateAdvertViewModel
 
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 @using (Html.BeginForm("Create", "Bulletin"))
 {
     <div class="form-group">
@@ -21,16 +23,6 @@
         @Html.LabelFor(m => m.Ad.MaxLevel)
         @Html.TextBoxFor(m => m.Ad.MaxLevel, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Ad.MaxLevel, "", new { @class = "text-danger" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Ad.Vocation)
-        @Html.DropDownListFor(m => m.Ad.Vocation, new SelectList(Model.VocList, "Name", "Name"), "Select Vocation", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Ad.Vocation, "", new { @class = "text-danger"})
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Ad.ServerName)
-        @Html.DropDownListFor(m => m.Ad.ServerName, new SelectList(Model.WorldsList, "name", "name"), "Select World", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Ad.ServerName, "", new { @class = "text-danger"})
     </div>
 
 

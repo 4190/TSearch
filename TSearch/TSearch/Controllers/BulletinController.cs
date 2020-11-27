@@ -67,24 +67,23 @@ namespace TSearch.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            var worldsListApiResponse = GetGameWorldsList();
-            List<Vocation> vocations = GetVocationList();
-
-            CreateAdvertViewModel viewModel = new CreateAdvertViewModel
-            {
-                WorldsList = worldsListApiResponse.worlds.allworlds,
-                VocList = vocations
-            };
-
-            return View(viewModel);
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateAdvertViewModel model)
         {
+            
             ApplicationUser user = _userManager.GetUserAsync(HttpContext.User).Result;
-            await _advertsService.Create(model.Ad, user);
-            return RedirectToAction("Board");
+            var result = await _advertsService.Create(model.Ad, user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Board");
+            }
+
+            ModelState.AddModelError(string.Empty, "This character does not exist");
+            return View(model);
+            
         }
 
         public IActionResult MyAdverts()
@@ -106,18 +105,12 @@ namespace TSearch.Controllers
         {
             return new List<Vocation>()
             {
-                new Vocation { Name = "EK"},
-                new Vocation { Name = "RP"},
-                new Vocation { Name = "MS"},
-                new Vocation { Name = "ED"}
+                new Vocation { Name = "Elite Knight"},
+                new Vocation { Name = "Royal Paladin"},
+                new Vocation { Name = "Master Sorcerer"},
+                new Vocation { Name = "Elder Druid"}
             };
         }
     }
 }
 
-/*
-var countriesApiClient = new RestClient("https://restcountries.eu/rest/v2/");
-var countriesRequest = new RestRequest("all", DataFormat.Json);
-var countriesResponse = countriesApiClient.Get(countriesRequest);
-var countriesListApiResonse = JsonConvert.DeserializeObject<List<Country>>(countriesResponse.Content);
-*/

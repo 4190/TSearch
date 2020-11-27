@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 using TSearch.DTO;
 using TSearch.Models;
-using TSearch.Models.ApiModels;
 
 namespace TSearch.Services
 {

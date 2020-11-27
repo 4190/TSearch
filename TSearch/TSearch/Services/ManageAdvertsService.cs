@@ -13,8 +13,6 @@ using TSearch.DTO;
 using TSearch.Data;
 using TSearch.Data.EFCore;
 using TSearch.Models;
-using TSearch.Models.ApiModels;
-using TSearch.ViewModels;
 
 
 namespace TSearch.Services
@@ -53,9 +51,10 @@ namespace TSearch.Services
         {
             
             Character character = GetCharacterDetailsIfExists(model.CharacterName);
-            character = ChangeVocationNameToShortForm(character);
+
             if(String.IsNullOrEmpty(character.characters.error))
             {
+                character = ChangeVocationNameToShortForm(character);
                 Advert ad = mapper.Map<Advert>(model);
                 mapper.Map(character, ad);
 

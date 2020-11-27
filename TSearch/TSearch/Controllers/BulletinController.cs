@@ -105,10 +105,10 @@ namespace TSearch.Controllers
         {
             return new List<Vocation>()
             {
-                new Vocation { Name = "Elite Knight"},
-                new Vocation { Name = "Royal Paladin"},
-                new Vocation { Name = "Master Sorcerer"},
-                new Vocation { Name = "Elder Druid"}
+                new Vocation { Name = "EK"},
+                new Vocation { Name = "RP"},
+                new Vocation { Name = "MS"},
+                new Vocation { Name = "ED"}
             };
         }
     }

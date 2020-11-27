@@ -176,3 +176,22 @@ body {
     margin-top: 10vh;
 }
 
+.ED h5
+{
+    color: green;
+}
+
+.EK h5
+{
+    color: red;
+}
+
+.MS h5
+{
+    color: purple;
+}
+
+.RP h5
+{
+    color: yellow;
+}

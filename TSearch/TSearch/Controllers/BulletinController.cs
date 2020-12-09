@@ -83,7 +83,14 @@ namespace TSearch.Controllers
 
             ModelState.AddModelError(string.Empty, "This character does not exist");
             return View(model);
-            
+        }
+
+        [Route("Bulletin/Details/{id}")]
+        public IActionResult Details(int id)
+        {
+            AdvertDTO model = _advertsService.GetAdvert(id).Result;
+
+            return View(model);
         }
 
         public IActionResult MyAdverts()

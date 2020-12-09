@@ -10,7 +10,6 @@ namespace TSearch.DTO
     {
         public int Id { get; set; }
         public string AuthorName { get; set; }
-        public string Country { get; set; }
 
         [Required(ErrorMessage = "Enter character name")]
         [Display(Name = "Character Name")]

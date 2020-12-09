@@ -13,6 +13,7 @@ using TSearch.DTO;
 using TSearch.Data;
 using TSearch.Data.EFCore;
 using TSearch.Models;
+using TSearch.Models.ApiModels;
 
 
 namespace TSearch.Services
@@ -35,7 +36,12 @@ namespace TSearch.Services
             List<Advert> adList =  await advertRepository.GetAll();
 
             return mapper.Map<List<Advert>, List<AdvertDTO>>(adList);
+        }
 
+        public async Task<AdvertDTO> GetAdvert(int id)
+        {
+            Advert ad = await advertRepository.Get(id);
+            return mapper.Map<AdvertDTO>(ad);
         }
 
         public List<AdvertDTO> GetFiltered(List<AdvertDTO> advertList, AdvertDTO filter)

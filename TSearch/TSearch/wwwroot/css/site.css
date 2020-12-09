@@ -176,6 +176,17 @@ body {
     margin-top: 10vh;
 }
 
+.board-element 
+{
+    transition: all .2s ease-in-out;
+}
+
+.board-element:hover
+{
+    transform: scale(1.05);
+    cursor:pointer;
+}
+
 .ED h5
 {
     color: green;

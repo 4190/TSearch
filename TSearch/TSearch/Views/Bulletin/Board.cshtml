@@ -15,7 +15,7 @@
 <div class="row">
     @foreach (var advert in Model.AdsList)
     {
-        <div class="col-md-4 mt-4">
+        <div class="col-md-4 mt-4 board-element" onclick="window.location.href='/Bulletin/Details/@advert.Id'">
             <div class="card profile-card-4">
                 <div class="card-img-block">
                     <div class="info-box">@advert.Text</div>

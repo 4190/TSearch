@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TSearch.Models;
+using TSearch.ViewModels;
+
+
 
 namespace TSearch.Controllers
 {
@@ -13,14 +16,16 @@ namespace TSearch.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+
         public HomeController(ILogger<HomeController> logger)
         {
+
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Board", "Bulletin");
         }
 
         public IActionResult Privacy()

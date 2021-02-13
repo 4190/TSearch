@@ -1,0 +1,32 @@
+﻿@model TSearch.ViewModels.MyAdvertsViewModel
+
+
+<table id="announcements" class="table table-hover">
+    <thead>
+        <tr>
+            <th>Character</th>
+            <th>Vocation</th>
+            <th>Advert text</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var ad in Model.MyAdvertsList)
+        {
+            <tr class="hover" onclick="window.location.href = '/Bulletin/Details/@ad.Id'">
+                <td>@ad.GameCharacter.CharacterName (@ad.GameCharacter.Level)</td>
+                <td>@ad.GameCharacter.Vocation</td>
+                <td>@ad.Text</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#announcements').DataTable();
+        });
+    </script>
+}

@@ -13,13 +13,12 @@
     <section>
         <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <h2>@ViewData["Title"]</h2>
-            <h4>Zaloguj się</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger "></span>
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger "></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password"></label>
@@ -36,13 +35,13 @@
             </div>
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Zaloguj</button>
+                <button type="submit" class="btn btn-primary">Login</button>
             </div>
             <div class="form-group">
 
 
 
-                <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]"><p>Zarejestruj nowe konto</p></a>
+                <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]"><p>Create new account</p></a>
 
             </div>
         </form>

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TSearch.Data;
 
 namespace TSearch.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210110172313_CharactersTable")]
+    partial class CharactersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,8 +165,12 @@ namespace TSearch.Data.Migrations
                     b.Property<string>("AuthorName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GameCharacterId")
+                    b.Property<int>("CharacterLevel")
                         .HasColumnType("int");
+
+                    b.Property<string>("CharacterName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MaxLevel")
                         .HasColumnType("int");
@@ -172,14 +178,20 @@ namespace TSearch.Data.Migrations
                     b.Property<int>("MinLevel")
                         .HasColumnType("int");
 
+                    b.Property<string>("ServerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Vocation")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("GameCharacterId");
 
                     b.ToTable("Adverts");
                 });
@@ -265,12 +277,6 @@ namespace TSearch.Data.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
-                    b.Property<string>("VerificationToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Vocation")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("World")
                         .HasColumnType("nvarchar(max)");
 
@@ -337,12 +343,6 @@ namespace TSearch.Data.Migrations
                     b.HasOne("TSearch.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("TSearch.Models.GameCharacter", "GameCharacter")
-                        .WithMany()
-                        .HasForeignKey("GameCharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TSearch.Models.GameCharacter", b =>

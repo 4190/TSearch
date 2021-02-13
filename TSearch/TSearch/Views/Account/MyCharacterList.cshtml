@@ -1,0 +1,32 @@
+﻿@model TSearch.ViewModels.MyCharactersViewModel
+
+
+<table id="chars" class="table table-hover">
+    <thead>
+        <tr>
+            <th>Character</th>
+            <th>Vocation</th>
+            <th>World</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var character in Model.MyCharactersList)
+        {
+            <tr>
+                <td>@character.CharacterName (@character.Level)</td>
+                <td>@character.Vocation</td>
+                <td>@character.World</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#chars').DataTable();
+        });
+    </script>
+}

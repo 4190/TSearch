@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,19 +22,19 @@ namespace TSearch.Services
     public class ManageAdvertsService : IManageAdvertsService
     {
         private readonly IMapper mapper;
-        private readonly ApplicationDbContext _context;
+        private readonly IManageGameCharacterService characterService;
         private readonly EfCoreAdvertRepository advertRepository;
         
-        public ManageAdvertsService(ApplicationDbContext _context, EfCoreAdvertRepository advertRepository, IMapper mapper)
+        public ManageAdvertsService(EfCoreAdvertRepository advertRepository, IMapper mapper, IManageGameCharacterService characterService)
         {
+            this.characterService = characterService;
             this.mapper = mapper;
-            this._context = _context;
             this.advertRepository = advertRepository;
         }
 
         public async Task<List<AdvertDTO>> GetAllAdverts()
         {
-            List<Advert> adList =  await advertRepository.GetAll();
+            List<Advert> adList = await advertRepository.GetAll();
 
             return mapper.Map<List<Advert>, List<AdvertDTO>>(adList);
         }
@@ -44,69 +45,42 @@ namespace TSearch.Services
             return mapper.Map<AdvertDTO>(ad);
         }
 
+        public async Task<List<AdvertDTO>> GetUserAdverts(string userName)
+        {
+            List<Advert> adList = await advertRepository.GetAll();
+            List<AdvertDTO> model = mapper.Map<List<AdvertDTO>>(adList).Where(x => x.AuthorName == userName).ToList();
+
+            return model;
+        }
+
         public List<AdvertDTO> GetFiltered(List<AdvertDTO> advertList, AdvertDTO filter)
         {
             return advertList
-                    .Where(x => filter.ServerName != null ? x.ServerName == filter.ServerName : true)
-                    .Where(x => filter.Vocation != null ? x.Vocation == filter.Vocation : true)
+                    .Where(x => filter.GameCharacter.World != null ? x.GameCharacter.World == filter.GameCharacter.World : true)
+                    .Where(x => filter.GameCharacter.Vocation != null ? x.GameCharacter.Vocation == filter.GameCharacter.Vocation : true)
                     .ToList();
-
         }
 
-        public async Task<Result> Create(AdvertDTO model, ApplicationUser user)
+        public bool CheckIfCharacterHasAdvert(int id)
+        {
+            Advert ad = advertRepository.GetByGameCharacterId(id);
+            if(ad != null)
+                return true;
+
+            return false;
+        }
+
+        public async Task<Result> Create(AdvertDTO model, ApplicationUser user, int selectedCharacterId)
         {
             
-            Character character = GetCharacterDetailsIfExists(model.CharacterName);
+            Advert ad = mapper.Map<Advert>(model);
+            ad.ApplicationUser = user;
+            ad.AuthorName = user.UserName;
+            ad.GameCharacterId = selectedCharacterId;
 
-            if(String.IsNullOrEmpty(character.characters.error))
-            {
-                character = ChangeVocationNameToShortForm(character);
-                Advert ad = mapper.Map<Advert>(model);
-                mapper.Map(character, ad);
+            await advertRepository.Add(ad);
 
-                ad.ApplicationUser = user;
-                ad.AuthorName = user.UserName;
-
-                await advertRepository.Add(ad);
-
-                return new Result { Succeeded = true };
-            }
-            else
-            {
-                return new Result { Succeeded = false };
-            }
-        }
-
-        public Character ChangeVocationNameToShortForm(Character character)
-        {
-            string str = character.characters.data.vocation;
-            string result = "";
-            bool v = true;
-            for (int i = 0; i < str.Length; i++)
-            {
-                if (str[i] == ' ')
-                {
-                    v = true;
-                }
-                else if (str[i] != ' ' && v == true)
-                {
-                    result += (str[i]);
-                    v = false;
-                }
-            }
-            character.characters.data.vocation = result;
-
-            return character;
-        }
-
-        public Character GetCharacterDetailsIfExists(string charName)
-        {
-            var tibiaApiClient = new RestClient("https://api.tibiadata.com/v2/characters/");
-            var characterRequest = new RestRequest(charName + ".json", DataFormat.Json);
-            var characterResponse = tibiaApiClient.Get(characterRequest);
-            Character characterApiResponse = JsonConvert.DeserializeObject<Character>(characterResponse.Content);
-
-            return characterApiResponse;
+            return new Result { Succeeded = true };
         }
     }
 }

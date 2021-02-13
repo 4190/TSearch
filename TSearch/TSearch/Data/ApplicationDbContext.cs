@@ -10,6 +10,7 @@ namespace TSearch.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Advert> Adverts { get; set; }
+        public DbSet<GameCharacter> Characters { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

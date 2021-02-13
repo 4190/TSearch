@@ -13,8 +13,8 @@ namespace TSearch.ViewModels
     public class CreateAdvertViewModel
     {
         public AdvertDTO Ad { get; set; }
-        public List<World> WorldsList { get; set; }
-        public List<Vocation> VocList { get; set; }  
+        public List<GameCharacterDTO> OwnedCharactersList { get; set; }
+        public int SelectedCharacterId { get; set; }
     }
 
     public class Vocation

@@ -10,7 +10,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 
 using TSearch.AccountViewModels;
+using TSearch.DTO;
 using TSearch.Models;
+using TSearch.Services;
+using TSearch.ViewModels;
 
 namespace TSearch.Controllers
 {
@@ -18,17 +21,21 @@ namespace TSearch.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IManageGameCharacterService characterService;
         private readonly ILogger _logger;
 
         public AccountController(
                     UserManager<ApplicationUser> userManager,
                     SignInManager<ApplicationUser> signInManager,
-                    ILogger<AccountController> logger)
+                    ILogger<AccountController> logger,
+                    IManageGameCharacterService characterService)
         {
+            this.characterService = characterService;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
         }
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -59,7 +66,7 @@ namespace TSearch.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 { 
@@ -97,7 +104,7 @@ namespace TSearch.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                ApplicationUser user = _userManager.FindByEmailAsync(model.Email).Result;
+                ApplicationUser user = _userManager.FindByNameAsync(model.Username).Result;
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
@@ -130,7 +137,12 @@ namespace TSearch.Controllers
         }
         
         //================================================ 
-
+        [Authorize]
+        public IActionResult AddCharacter()
+        {
+            return View();
+        }
+        [Authorize]
         public async Task<IActionResult> ChangePassword(AccountProfileViewModel model)
         {
             ApplicationUser user = _userManager.FindByIdAsync(model.User.Id).Result;
@@ -140,6 +152,17 @@ namespace TSearch.Controllers
                 return RedirectToAction("Success");
             }
             return RedirectToAction("ProfileError");
+        }
+        [Authorize]
+        public IActionResult MyCharacterList()
+        {
+            MyCharactersViewModel viewModel = new MyCharactersViewModel()
+            {
+                MyCharactersList = characterService.GetUserCharacters(
+                    _userManager.GetUserAsync(HttpContext.User).Result.Id
+                    )
+            };
+            return View(viewModel);
         }
         
         [Authorize]
@@ -172,6 +195,53 @@ namespace TSearch.Controllers
         public IActionResult Success()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Verify(GameCharacterDTO model)
+        {
+            var isTokenVerificationValid = characterService.VerifyToken(model);
+            if(isTokenVerificationValid)
+            {
+                model.ApplicationUser = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result;
+                await characterService.AddGameCharacterToDbAsync(model);
+                return RedirectToAction("MyCharacterList", "Account");
+            }
+            return Content("Error");
+        }
+
+        [Authorize]
+        public IActionResult VerifyCharacter(GameCharacterDTO model)
+        {
+            var character = characterService.GetCharacterDetailsIfExists(model.CharacterName);
+            if (character.characters.error == null)
+            {
+
+                if (characterService.CheckIfCharacterIsAlreadyOwned(model.CharacterName))
+                {
+                    TempData["ErrorMessage"] = "This character was already assigned";
+                    return RedirectToAction("AddCharacter");
+                }
+
+                model = characterService.MapDetailsFromApi(character, model);
+                model.VerificationToken = Guid.NewGuid().ToString();
+                return View(model);
+            }
+
+            TempData["ErrorMessage"] = "This character does not exist";
+            return RedirectToAction("AddCharacter");
+        }
+
+        [Route("Account/VerifyCheck/{characterName}/{verificationToken}")]
+        public IActionResult VerifyCheck(string characterName, string verificationToken)
+        {
+            GameCharacterDTO model = new GameCharacterDTO()
+            {
+                VerificationToken = verificationToken,
+                CharacterName = characterName.Replace('_',' ')
+            };
+            if (characterService.VerifyToken(model))
+                return Content("Token correct! Click verify to add this character to your account.");
+            return Content("Check failed. Maybe your character info didn't yet update or you pasted wrong code. If pasted code is correct try again within 5 minutes. Last check: " + DateTime.Now.ToShortTimeString());
         }
     }
 }

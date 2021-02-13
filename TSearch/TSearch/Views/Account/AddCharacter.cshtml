@@ -1,0 +1,19 @@
+﻿@model TSearch.DTO.GameCharacterDTO
+
+<ul class="validation-summary-errors text-danger">
+    <li>
+        @TempData["ErrorMessage"]
+    </li>
+</ul>
+
+
+@using (Html.BeginForm("VerifyCharacter", "Account"))
+{
+    <div class="form-group">
+        <label asp-for="CharacterName"></label>
+        <input asp-for="CharacterName" class="form-control" />
+        <span asp-validation-for="CharacterName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary">Save</button>
+}

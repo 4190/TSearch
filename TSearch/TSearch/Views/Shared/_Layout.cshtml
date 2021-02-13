@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - TSearch</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-cyborg.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/datatables/datatables.min.css" />
 </head>
 <body>
     <partial name="_navBar" />
@@ -14,15 +15,10 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - TSearch - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/datatables/datatables.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

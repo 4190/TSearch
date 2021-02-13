@@ -65,6 +65,7 @@ body {
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
+  z-index: -999;
   margin-bottom: 60px;
 }
 .footer {
@@ -184,6 +185,11 @@ body {
 .board-element:hover
 {
     transform: scale(1.05);
+    cursor:pointer;
+}
+
+.hover:hover
+{
     cursor:pointer;
 }
 

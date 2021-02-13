@@ -1,12 +1,8 @@
 ﻿@model TSearch.DTO.AdvertDTO
 
 
-    <div class="jumbotron">
-        <h1 class="display-3">@Model.CharacterName (@Model.CharacterLevel @Model.Vocation)</h1>
-        <p class="lead">@Model.Text</p>
-        <hr class="my-4">
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-        <p class="lead">
-            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-        </p>
-    </div>
+<div class="jumbotron">
+    <h1 class="display-3">@Model.GameCharacter.CharacterName (@Model.GameCharacter.Level @Model.GameCharacter.Vocation) - @Model.GameCharacter.World</h1>
+    <p class="lead">@Model.Text</p>
+    <hr class="my-4">
+</div>

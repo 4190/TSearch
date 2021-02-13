@@ -4,24 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+using TSearch.Models;
+
 namespace TSearch.DTO
 {
     public class AdvertDTO
     {
         public int Id { get; set; }
         public string AuthorName { get; set; }
-
-        [Required(ErrorMessage = "Enter character name")]
-        [Display(Name = "Character Name")]
-        public string CharacterName { get; set; }
-
-        [Range(0, 9999, ErrorMessage = "Value must be numeric from {1} to {2}")]
-        [Required]
-        public int CharacterLevel { get; set; }
-
-        public string ServerName { get; set; }
-
-        public string Vocation { get; set; }
 
         [Range(0, 9999, ErrorMessage = "Value must be numeric from {1} to {2}")]
         [Required]
@@ -35,7 +25,9 @@ namespace TSearch.DTO
 
         [Display(Name = "Description")]
         public string Text { get; set; }
-
+        public ApplicationUser ApplicationUser { get; set; }
+        public GameCharacterDTO GameCharacter { get; set; }
         public string ApplicationUserId { get; set; }
+        public int GameCharacterId { get; set; }
     }
 }

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using TSearch.Models;
 using TSearch.DTO;
 
 namespace TSearch.ViewModels
 {
-    public class MyAdvertsViewModel
+    public class MyCharactersViewModel
     {
-        public List<AdvertDTO> MyAdvertsList { get; set; }
+        public List<GameCharacterDTO> MyCharactersList { get; set; }
     }
 }

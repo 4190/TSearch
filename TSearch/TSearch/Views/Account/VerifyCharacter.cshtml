@@ -1,0 +1,28 @@
+﻿@model TSearch.DTO.GameCharacterDTO
+
+@using (Html.BeginForm("Verify", "Account"))
+{
+    <div class="jumbotron">
+        <h1 class="display-3">Character name: @Model.CharacterName</h1>
+        <p class="lead">Please put a following code in your character description on tibia.com.</p>
+        <p>@Model.VerificationToken</p>
+        <p class="lead">It can take up to 5 minutes before character comment gets updated on tibiaAPI and can be successfully checked. You can check if it's updated and verified correctly by clicking Check button.</p>
+        <p class="lead">When api information gets updated and your verification token appears correct you can click Verify to add this character to your account</p>
+        <hr class="my-4">
+        <input asp-for="CharacterName" hidden />
+        <input asp-for="Level" hidden />
+        <input asp-for="Vocation" hidden />
+        <input asp-for="World" hidden />
+        <input asp-for="VerificationToken" hidden />
+        <p id="check" class="btn btn-primary btn-lg hover" character-name-js="@Model.CharacterName.Replace(' ','_')" verification-token-js="@Model.VerificationToken">Check</p>
+        <p id="check-result" class="lead"></p>
+        <p class="lead">
+            <button type="submit" class="btn btn-primary btn-lg">Verify</button>
+        </p>
+    </div>
+}
+
+@section Scripts
+{
+    <script src="~/js/verify-api-check.js"></script>
+}

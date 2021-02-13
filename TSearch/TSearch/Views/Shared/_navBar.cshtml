@@ -40,9 +40,10 @@
                         <div class="dropdown-menu" style="">
                             <a class="dropdown-item" asp-area="" asp-controller="Bulletin" asp-action="Board">Show all</a>
                             <a class="dropdown-item" asp-area="" asp-controller="Bulletin" asp-action="Create">Create your ad</a>
-                            <a class="dropdown-item" href="#">My ads</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Bulletin" asp-action="MyAdverts" asp-route-userName="@User.Identity.Name">My ads</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="MyCharacterList">My characters</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="AddCharacter">Add character to my account</a>
                         </div>
                     </li>
                 </ul>

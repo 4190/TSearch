@@ -44,7 +44,9 @@ namespace TSearch
             services.AddRazorPages();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<EfCoreAdvertRepository>();
+            services.AddScoped<EfCoreGameCharacterRepository>();
             services.AddScoped<IManageAdvertsService, ManageAdvertsService>();
+            services.AddScoped<IManageGameCharacterService, ManageGameCharacterService>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -63,13 +65,13 @@ namespace TSearch
 
                 // User settings.
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = true;
+                options.User.RequireUniqueEmail = false;
             });
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
 
                 options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/AccessDenied";

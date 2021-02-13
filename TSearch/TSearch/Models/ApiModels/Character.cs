@@ -21,5 +21,6 @@ namespace TSearch.Models.ApiModels
         public string vocation { get; set; }
         public int level { get; set; }
         public string world { get; set; }
+        public string comment { get; set; }
     }
 }

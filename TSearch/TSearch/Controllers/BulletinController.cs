@@ -23,21 +23,22 @@ namespace TSearch.Controllers
 {
     public class BulletinController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IManageAdvertsService _advertsService;
+        private readonly IManageGameCharacterService _charactersService;
 
-        public BulletinController(UserManager<ApplicationUser> userManager, ApplicationDbContext _context, IManageAdvertsService advertsService)
+        public BulletinController(UserManager<ApplicationUser> userManager, 
+            IManageAdvertsService advertsService,
+            IManageGameCharacterService characterService)
         {
+            _charactersService = characterService;
             _userManager = userManager;
             _advertsService = advertsService;
-            this._context = _context;
         }
 
         public IActionResult Index()
         {
             return View();
-           
         }
 
         public IActionResult Board(BoardAdvertViewModel model)
@@ -67,7 +68,11 @@ namespace TSearch.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            return View();
+            CreateAdvertViewModel viewModel = new CreateAdvertViewModel()
+            {
+                OwnedCharactersList = _charactersService.GetUserCharacters(_userManager.GetUserAsync(User).Result.Id)
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -75,10 +80,18 @@ namespace TSearch.Controllers
         {
             
             ApplicationUser user = _userManager.GetUserAsync(HttpContext.User).Result;
-            var result = await _advertsService.Create(model.Ad, user);
+
+            if(_advertsService.CheckIfCharacterHasAdvert(model.SelectedCharacterId))
+            {
+                ModelState.AddModelError(string.Empty, "This character has advert already");
+                model.OwnedCharactersList = _charactersService.GetUserCharacters(_userManager.GetUserAsync(User).Result.Id);
+                return View(model);
+            }
+
+            var result = await _advertsService.Create(model.Ad, user, model.SelectedCharacterId);
             if (result.Succeeded)
             {
-                return RedirectToAction("Board");
+                return RedirectToAction("MyAdverts", new { userName = user.UserName });
             }
 
             ModelState.AddModelError(string.Empty, "This character does not exist");
@@ -93,14 +106,20 @@ namespace TSearch.Controllers
             return View(model);
         }
 
-        public IActionResult MyAdverts()
+        [Authorize]
+        public IActionResult MyAdverts(string userName)
         {
-            return Content("");
+            MyAdvertsViewModel model = new MyAdvertsViewModel()
+            {
+                MyAdvertsList = _advertsService.GetUserAdverts(userName).Result
+            };
+            return View(model);
         }
 
         private ApiWorlds GetGameWorldsList()
         {
-            var tibiaApiClient = new RestClient("https://api.tibiadata.com/v2/");
+            var tibiaApiClient = new RestClient("https://api.tibiadata.com/v2");
+            tibiaApiClient.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
             var worldsRequest = new RestRequest("worlds.json", DataFormat.Json);
             var worldsResponse = tibiaApiClient.Get(worldsRequest);
             ApiWorlds worldsListApiResponse = JsonConvert.DeserializeObject<ApiWorlds>(worldsResponse.Content);
